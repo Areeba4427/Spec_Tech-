@@ -1,0 +1,61 @@
+command: npm install express axios.
+
+
+
+//FETCH
+const express = require('express');
+const axios = require('axios');
+
+const app = express();
+const PORT = 3000;
+
+// Endpoint to fetch list of available cars
+app.get('/cars', async (req, res) => {
+  try {
+    // Make a GET request to the third-party API
+    const response = await axios.get('https://api.example.com/cars');
+
+    // Extract the car data from the response
+    const cars = response.data;
+
+    // Return the car data as the API response
+    res.json({ cars });
+  } catch (error) {
+    // Handle any errors that occur during the request
+    res.status(500).json({ error: 'Failed to fetch car data' });
+  }
+});
+
+// Start the server
+app.listen(PORT, () => {
+  console.log(`Server listening on port ${PORT}`);
+});
+
+
+//USAGE
+axios.get('/cars')
+  .then(response => {
+    // Access the car data from the response
+    const cars = response.data.cars;
+
+    // Iterate over each car
+    cars.forEach(car => {
+      // Access individual car properties
+      const carId = car.car_id;
+      const make = car.make;
+      const model = car.model;
+      const year = car.year;
+      const availability = car.availability;
+
+      // Perform any necessary operations with the car data
+      console.log(`Car ID: ${carId}`);
+      console.log(`Make: ${make}`);
+      console.log(`Model: ${model}`);
+      console.log(`Year: ${year}`);
+      console.log(`Availability: ${availability}`);
+    });
+  })
+  .catch(error => {
+    // Handle any errors that occur during the request
+    console.error('Failed to fetch car data:', error);
+  });
